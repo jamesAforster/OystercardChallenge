@@ -1,5 +1,5 @@
 class Oystercard
-  attr_reader :balance
+  attr_reader :balance #:in_journey
   MAXIMUM_BALANCE = 90
 
   def initialize
@@ -13,5 +13,15 @@ class Oystercard
 
   def deduct(amount)
     @balance -= amount
+  end
+
+  def in_journey?
+    false
+    @in_journey
+  end
+
+  def touch_in
+  #  journey = @in_journey.new(true)
+  #  journey
   end
 end

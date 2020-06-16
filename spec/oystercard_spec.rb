@@ -49,13 +49,20 @@ describe Oystercard do
 
   describe '#touch_in' do
     it "can touch in" do
+      subject.top_up(10)
       subject.touch_in
       expect(subject.in_journey).to eq(true)
+    end
+
+    it "raises an error when minimum balance is less than £1" do
+      card = Oystercard.new
+      expect { card.touch_in }.to raise_error("Insufficient funds")
     end
   end
 
   describe '#touch_out' do
     it "can touch out" do
+      subject.top_up(10)
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey).to eq(false)

@@ -86,5 +86,32 @@ describe Oystercard do
       subject.touch_out
       expect(subject.entry_station).to eq(nil)
     end
+
+    it "records the exit station" do
+      subject.top_up(10)
+      subject.touch_out(station)
+      expect(subject.exit_station).to eq(station)
+    end
+  end
+
+  describe '#journey_history' do
+    it "checks card has empty journey history by default" do
+      card = Oystercard.new
+      expect(card.journey_history).to eq({})
+    end
+
+    it "lists the journey history" do
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.journey_history).to include(station)
+    end
+
+    it "lists one journey" do
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.journey_history.length).to eq(1)
+    end
   end
 end

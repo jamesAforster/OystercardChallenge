@@ -1,6 +1,14 @@
 require './lib/oystercard.rb'
 
 describe Oystercard do
+  MAXIMUM_BALANCE = 90
+
+  describe '#initialize' do
+    it "creates card with a maximum balance of £90" do
+      expect(Oystercard.new.maximum_balance).to eq(90)
+    end
+  end
+
   describe '#balance' do
     it 'checks if there is a balance' do
       expect(subject.balance).to eq(0)
@@ -17,9 +25,8 @@ describe Oystercard do
     end
 
     it "raises an error when maximum balance is exceeded" do
-      maximum_balance = Oystercard::MAXIMUM_BALANCE
-      subject.top_up(maximum_balance)
-      expect { subject.top_up 1 }.to raise_error "£#{maximum_balance} top up limit exceeded!"
+      subject.top_up(Oystercard::MAXIMUM_BALANCE)
+      expect { subject.top_up 1 }.to raise_error "£#{MAXIMUM_BALANCE} top up limit exceeded!"
     end
   end
 
@@ -34,12 +41,24 @@ describe Oystercard do
     end
   end
 
-  it "is initially not in a journey" do
-    expect(subject).not_to be_in_journey
+  describe '#in_journey?' do
+    it "is initially not in a journey" do
+      expect(subject.in_journey).to eq(false)
+    end
   end
 
-  it "can touch in" do
-    subject.touch_in
-    expect(subject).to be_in_journey
+  describe '#touch_in' do
+    it "can touch in" do
+      subject.touch_in
+      expect(subject.in_journey).to eq(true)
+    end
+  end
+
+  describe '#touch_out' do
+    it "can touch out" do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey).to eq(false)
+    end
   end
 end

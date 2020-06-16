@@ -2,6 +2,7 @@ require './lib/oystercard.rb'
 
 describe Oystercard do
   MAXIMUM_BALANCE = 90
+  let(:station) { "Kings Cross" }
 
   describe '#initialize' do
     it "creates card with a maximum balance of £90" do
@@ -39,21 +40,29 @@ describe Oystercard do
 
   describe '#in_journey?' do
     it "is initially not in a journey" do
-      expect(subject.in_journey).to eq(false)
+      expect(subject.in_journey?).to eq(false)
     end
   end
 
   describe '#touch_in' do
+
     it "can touch in" do
       subject.top_up(10)
-      subject.touch_in
-      expect(subject.in_journey).to eq(true)
+      subject.touch_in(station)
+      expect(subject.in_journey?).to eq(true)
     end
 
     it "raises an error when minimum balance is less than £1" do
       card = Oystercard.new
       expect { card.touch_in }.to raise_error("Insufficient funds")
     end
+
+    it "records the last station touched in at" do
+      subject.top_up(10)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq(station)
+    end
+
   end
 
   describe '#touch_out' do
@@ -61,7 +70,7 @@ describe Oystercard do
       subject.top_up(10)
       subject.touch_in
       subject.touch_out
-      expect(subject.in_journey).to eq(false)
+      expect(subject.in_journey?).to eq(false)
     end
 
     it "deducts the balance after touched out" do
@@ -69,6 +78,13 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject.balance).to eq(9)
+    end
+
+    it "will set entry_station to nil" do
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.entry_station).to eq(nil)
     end
   end
 end

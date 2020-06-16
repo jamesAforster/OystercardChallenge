@@ -31,13 +31,9 @@ describe Oystercard do
   end
 
   describe '#deduct' do
-    it "deducts a value" do
-      expect(subject).to respond_to(:deduct).with(1).argument
-    end
-
     it "deducts money from the balance" do
       subject.top_up(10)
-      expect{ subject.deduct 1 }.to change{ subject.balance }.by -1
+      expect{ subject.send(:deduct, 1) }.to change{ subject.balance }.by -1
     end
   end
 
@@ -66,6 +62,13 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey).to eq(false)
+    end
+
+    it "deducts the balance after touched out" do
+      subject.top_up(10)
+      subject.touch_in
+      subject.touch_out
+      expect(subject.balance).to eq(9)
     end
   end
 end

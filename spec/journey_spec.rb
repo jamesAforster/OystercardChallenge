@@ -33,7 +33,28 @@ describe Journey do
 
   describe '#complete?' do
     it 'responds to the complete? method' do
-      expect(journey).to respond_to(:complete?)
+      expect(journey).to respond_to(:complete)
     end
+
+    it 'gives false if journey not complete' do
+      expect(journey.complete).to eq (false)
+    end
+
+    it 'give true if journey complete' do
+      journey.finish
+      expect(journey.complete).to eq (true)
+    end
+  end
+
+  describe '#fare' do
+    it 'charges penalty when not touched in' do
+    journey.finish
+    expect(journey.fare).to eq Journey::PENALTY
+    end
+
+     it 'charges penalty when not touched out' do
+     journey = Journey.new("Camden")
+     expect(journey.fare).to eq Journey::PENALTY 
+     end
   end
 end

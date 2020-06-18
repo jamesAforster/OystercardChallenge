@@ -2,7 +2,7 @@ require './lib/oystercard.rb'
 
 describe Oystercard do
   MAXIMUM_BALANCE = 90
-  let(:station) { "Kings Cross" }
+  let(:station) { double "Kings Cross" }
 
   describe '#initialize' do
     it "creates card with a maximum balance of £90" do
@@ -58,11 +58,11 @@ describe Oystercard do
     end
 
     it "records the last station touched in at" do
+      station = double("Kings Cross")
       subject.top_up(10)
       subject.touch_in(station)
       expect(subject.entry_station).to eq(station)
     end
-
   end
 
   describe '#touch_out' do
@@ -95,16 +95,19 @@ describe Oystercard do
   end
 
   describe '#journey_history' do
+
     it "checks card has empty journey history by default" do
       card = Oystercard.new
-      expect(card.journey_history).to eq({})
+      expect(card.journey_history).to eq([])
     end
 
     it "lists the journey history" do
+      exit_station = "Camden"
       subject.top_up(10)
       subject.touch_in(station)
-      subject.touch_out
-      expect(subject.journey_history).to include(station)
+      subject.touch_out(exit_station)
+      puts subject.journey_history
+      expect(subject.journey_history[0][:entry_station]).to eq(station)
     end
 
     it "lists one journey" do
@@ -113,5 +116,6 @@ describe Oystercard do
       subject.touch_out
       expect(subject.journey_history.length).to eq(1)
     end
+
   end
 end

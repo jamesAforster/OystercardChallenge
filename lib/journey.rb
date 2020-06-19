@@ -6,7 +6,7 @@ class Journey
     @complete = false
   end
 
-  def finish
+  def finish(exit_station)
     @complete = true # deleted method complete. set to true if journey is finished
   end
 
@@ -15,9 +15,8 @@ class Journey
       PENALTY
     elsif @complete == false
       PENALTY
+    elsif @complete == true
+      1
     end
   end
-
-
-
 end

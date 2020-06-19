@@ -41,14 +41,14 @@ describe Journey do
     end
 
     it 'give true if journey complete' do
-      journey.finish
+      journey.finish("London Bridge")
       expect(journey.complete).to eq (true)
     end
   end
 
   describe '#fare' do
     it 'charges penalty when not touched in' do
-    journey.finish
+    journey.finish("London Bridge")
     expect(journey.fare).to eq Journey::PENALTY
     end
 
@@ -56,5 +56,13 @@ describe Journey do
      journey = Journey.new("Camden")
      expect(journey.fare).to eq Journey::PENALTY 
      end
+
+     it 'charge the fare of 1 when touched in and out' do
+      journey = Journey.new("Camden")
+      journey.finish("London Bridge")
+      expect(journey.fare).to eq (1)
+     end
   end
+
+
 end
